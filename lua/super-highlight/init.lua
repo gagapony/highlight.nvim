@@ -410,9 +410,9 @@ function M.open_picker()
   if not config.get("picker") then return nil end
   local bufnr = current_buf()
   sync_positions(bufnr)
-  local ok, picker = pcall(require, "superpowers.highlight.picker")
+  local ok, picker = pcall(require, "super-highlight.picker")
   if not ok then
-    local missing = type(picker) == "string" and picker:match("module 'superpowers%.highlight%.picker' not found", 1, true)
+    local missing = type(picker) == "string" and picker:match("module 'super%-highlight%.picker' not found", 1, true)
     if missing then return nil end
     vim.notify(picker, vim.log.levels.ERROR, { title = "Super Highlight" })
     return nil
