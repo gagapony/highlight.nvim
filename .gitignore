@@ -1,0 +1,22 @@
+# Vim swap files
+*.swp
+*.swo
+*~
+
+# Neovim
+*.nvue
+.nvim/
+
+# Lua
+luacache.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
