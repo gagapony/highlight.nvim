@@ -1,9 +1,9 @@
-local state = require "super-highlight.state"
+local state = require "highlight.state"
 
 local M = {}
 
 local function notify_warn(message)
-  vim.notify(message, vim.log.levels.WARN, { title = "Super Highlight" })
+  vim.notify(message, vim.log.levels.WARN, { title = "highlight.nvim" })
 end
 
 local function has_ui()

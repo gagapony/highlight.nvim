@@ -24,9 +24,9 @@ Thank you for your interest in contributing! This document provides guidelines f
 
 Clone your fork and test with:
 ```bash
-git clone https://github.com/yourusername/super-highlight.git
-cd super-highlight
-nvim --headless -c "lua require('super-highlight').setup({})" -c "qa"
+git clone https://github.com/gagapony/highlight.nvim.git
+cd highlight.nvim
+nvim --headless -c "lua require('highlight').setup({})" -c "qa"
 ```
 
 ## Code Style

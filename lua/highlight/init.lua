@@ -1,7 +1,7 @@
-local state = require "super-highlight.state"
-local render = require "super-highlight.render"
-local config = require "super-highlight.config"
-local items = require "super-highlight.items"
+local state = require "highlight.state"
+local render = require "highlight.render"
+local config = require "highlight.config"
+local items = require "highlight.items"
 
 local M = {}
 
@@ -287,8 +287,8 @@ local function create_autocmds()
 end
 
 local function refresh_theme()
-  local palette = require("super-highlight.theme").build_palette()
-  M._resolved_palette_count = require("super-highlight.theme").create_hl_groups(palette)
+  local palette = require("highlight.theme").build_palette()
+  M._resolved_palette_count = require("highlight.theme").create_hl_groups(palette)
   state.for_each(function(bufnr, buf_state)
     if valid_loaded_buf(bufnr) and #buf_state.items > 0 then
       render.redraw(bufnr, buf_state)
@@ -310,8 +310,8 @@ end
 
 function M.setup(opts)
   config.setup(opts)
-  local palette = require("super-highlight.theme").build_palette()
-  M._resolved_palette_count = require("super-highlight.theme").create_hl_groups(palette)
+  local palette = require("highlight.theme").build_palette()
+  M._resolved_palette_count = require("highlight.theme").create_hl_groups(palette)
   create_commands()
   create_autocmds()
   create_theme_watcher()
@@ -440,11 +440,11 @@ function M.open_picker()
   if not config.get("picker") then return nil end
   local bufnr = current_buf()
   sync_positions(bufnr)
-  local ok, picker = pcall(require, "super-highlight.picker")
+  local ok, picker = pcall(require, "highlight.picker")
   if not ok then
-    local missing = type(picker) == "string" and picker:match("module 'super%-highlight%.picker' not found", 1, true)
+    local missing = type(picker) == "string" and picker:match("module 'highlight%.picker' not found", 1, true)
     if missing then return nil end
-    vim.notify(picker, vim.log.levels.ERROR, { title = "Super Highlight" })
+    vim.notify(picker, vim.log.levels.ERROR, { title = "highlight.nvim" })
     return nil
   end
   if ok and type(picker.open) == "function" then return picker.open { bufnr = bufnr, opts = config.opts } end

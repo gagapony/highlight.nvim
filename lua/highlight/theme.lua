@@ -1,4 +1,4 @@
-local config = require "super-highlight.config"
+local config = require "highlight.config"
 
 local M = {}
 

@@ -1,6 +1,6 @@
-local state = require "super-highlight.state"
-local render = require "super-highlight.render"
-local theme = require "super-highlight.theme"
+local state = require "highlight.state"
+local render = require "highlight.render"
+local theme = require "highlight.theme"
 
 local M = {}
 

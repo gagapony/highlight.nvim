@@ -1,6 +1,6 @@
 local M = {}
 
-M.ns = vim.api.nvim_create_namespace("super-highlight")
+M.ns = vim.api.nvim_create_namespace("highlight")
 
 local function normalize_bufnr(bufnr)
   if bufnr == nil or bufnr == 0 then return vim.api.nvim_get_current_buf() end

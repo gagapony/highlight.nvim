@@ -55,7 +55,7 @@ end
 ```vim
 Plug 'gagapony/highlight.nvim'
 lua << EOF
-require("super-highlight").setup({})
+require("highlight").setup({})
 EOF
 ```
 
@@ -64,12 +64,12 @@ EOF
 1. Clone this repository to your Neovim config directory:
 ```bash
 git clone https://github.com/gagapony/highlight.nvim.git \
-  ~/.config/nvim/lua/super-highlight
+  ~/.config/nvim/lua/highlight
 ```
 
 2. Add to your `init.lua`:
 ```lua
-require("super-highlight").setup({})
+require("highlight").setup({})
 ```
 
 ## 🎮 Usage
@@ -209,7 +209,7 @@ Enables/disables Snacks picker integration. Requires `folke/snacks.nvim`.
 #### For Dark Themes
 
 ```lua
-require("super-highlight").setup({
+require("highlight").setup({
   saturation = 0.40,   -- More vivid for dark backgrounds
   lightness = 0.50,    -- Brighter highlights
 })
@@ -218,7 +218,7 @@ require("super-highlight").setup({
 #### For Light Themes
 
 ```lua
-require("super-highlight").setup({
+require("highlight").setup({
   saturation = 0.25,   -- Less saturation to avoid glare
   lightness = 0.35,    -- Darker highlights for contrast
 })
@@ -227,7 +227,7 @@ require("super-highlight").setup({
 #### Custom Color Palette
 
 ```lua
-require("super-highlight").setup({
+require("highlight").setup({
   auto_theme = false,
   palette = {
     { name = "red",    bg = "#ff6b6b", fg = "#1a1a1a" },
