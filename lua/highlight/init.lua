@@ -64,9 +64,48 @@ local function ordered_range(start_pos, end_pos)
 end
 
 local function visual_range()
-  local start_pos = vim.fn.getpos("'<")
-  local end_pos = vim.fn.getpos("'>")
-  return ordered_range(start_pos, end_pos)
+  -- Get the current visual selection directly from mode
+  local mode = vim.api.nvim_get_mode().mode
+
+  -- Only process if we're in visual mode
+  if not (mode == "v" or mode == "V" or mode == "\22") then
+    -- Fallback to marks if not in visual mode (for safety)
+    local start_pos = vim.fn.getpos("'<")
+    local end_pos = vim.fn.getpos("'>")
+    return ordered_range(start_pos, end_pos)
+  end
+
+  -- Get cursor position and visual start position
+  local cursor = vim.api.nvim_win_get_cursor(0) -- {row, col}, 1-indexed
+  local visual_start = vim.fn.getpos("v") -- {bufnum, lnum, col, off}, 1-indexed
+
+  local start_row = visual_start[2] - 1  -- Convert to 0-indexed
+  local start_col = visual_start[3] - 1 -- Convert to 0-indexed
+  local end_row = cursor[1] - 1         -- Convert to 0-indexed
+  local end_col = cursor[2]             -- Already 0-indexed for col
+
+  -- For visual block mode, use the marks
+  if mode == "\22" then -- Visual block mode
+    local start_pos = vim.fn.getpos("'<")
+    local end_pos = vim.fn.getpos("'>")
+    return ordered_range(start_pos, end_pos)
+  end
+
+  -- Handle backwards selection
+  if start_row > end_row or (start_row == end_row and start_col > end_col) then
+    start_row, end_row = end_row, start_row
+    start_col, end_col = end_col, start_col + 1
+  end
+
+  if start_row < 0 or end_row < 0 then return nil end
+  if start_row == end_row and start_col >= end_col then return nil end
+
+  return {
+    start_row = start_row,
+    start_col = start_col,
+    end_row = end_row,
+    end_col = end_col,
+  }
 end
 
 local function range_label(bufnr, range)
@@ -343,29 +382,37 @@ end
 
 function M.toggle_visual()
   local bufnr = current_buf()
+
+  -- Get range and text while still in visual mode
   local range = visual_range()
   if not range then return end
 
   local text = range_label(bufnr, range)
 
-  local existing = items.find_global_item(nil, text)
-  if existing then
-    items.remove_global_item(existing.id)
-    state.remove_item(bufnr, existing.id)
-    render.redraw(bufnr, state.get(bufnr))
-    return
-  end
+  -- Exit visual mode
+  vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "n", false)
 
-  local item = items.add_global_item(bufnr, {
-    kind = "range",
-    text = text,
-    label = text,
-    range = range,
-  })
+  -- Process after visual mode exits
+  vim.schedule(function()
+    local existing = items.find_global_item(nil, text)
+    if existing then
+      items.remove_global_item(existing.id)
+      state.remove_item(bufnr, existing.id)
+      render.redraw(bufnr, state.get(bufnr))
+      return
+    end
 
-  if not item then
-    vim.notify("Failed to add range highlight", vim.log.levels.ERROR, { title = "Super Highlight" })
-  end
+    local item = items.add_global_item(bufnr, {
+      kind = "range",
+      text = text,
+      label = text,
+      range = range,
+    })
+
+    if not item then
+      vim.notify("Failed to add range highlight", vim.log.levels.ERROR, { title = "highlight.nvim" })
+    end
+  end)
 end
 
 function M.clear_at_cursor()
