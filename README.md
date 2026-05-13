@@ -1,4 +1,4 @@
-# Super Highlight
+# highlight.nvim
 
 <div align="center">
 
@@ -42,7 +42,7 @@ end
 
 ```lua
 {
-  "yourusername/super-highlight",
+  "gagapony/highlight.nvim",
   event = "VeryLazy",  -- Load when needed
   opts = {
     -- Configuration here (optional)
@@ -53,7 +53,7 @@ end
 ### Using [vim-plug](https://github.com/junegunn/vim-plug)
 
 ```vim
-Plug 'yourusername/super-highlight'
+Plug 'gagapony/highlight.nvim'
 lua << EOF
 require("super-highlight").setup({})
 EOF
@@ -63,7 +63,7 @@ EOF
 
 1. Clone this repository to your Neovim config directory:
 ```bash
-git clone https://github.com/yourusername/super-highlight.git \
+git clone https://github.com/gagapony/highlight.nvim.git \
   ~/.config/nvim/lua/super-highlight
 ```
 
@@ -306,8 +306,8 @@ When you change colorscheme (`:colorscheme gruvbox`), all highlights automatical
 
 ## 🆚 Comparison with vim-highlighter
 
-| Feature | vim-highlighter | super-highlight |
-|---------|----------------|-----------------|
+| Feature | vim-highlighter | highlight.nvim |
+|---------|----------------|----------------|
 | **Language** | VimScript | Lua (modern) |
 | **Rendering** | `matchadd()` | Extmarks (faster) |
 | **Persistence** | Buffer-local | Cross-buffer ✨ |
