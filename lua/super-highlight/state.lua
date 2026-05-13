@@ -118,11 +118,16 @@ function M.add_item(bufnr, item)
   local range = normalize_range(item.range)
   local stored_item = copy_item(item)
 
-  stored_item.id = state.next_id
+  -- Preserve global item ID if provided, otherwise use buffer-local ID
+  if item.id then
+    stored_item.id = item.id
+  else
+    stored_item.id = state.next_id
+    state.next_id = state.next_id + 1
+  end
   stored_item.range = range
   stored_item.positions = positions
   stored_item.marks = copy_list(item.marks)
-  state.next_id = state.next_id + 1
   table.insert(state.items, stored_item)
   return stored_item
 end

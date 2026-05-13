@@ -83,6 +83,36 @@ local function range_label(bufnr, range)
   return text
 end
 
+local function scan_word_positions(bufnr, word)
+  local positions = {}
+  local escaped = vim.fn.escape(word, "\\")
+  local pattern = ("\\V\\<%s\\>"):format(escaped)
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+  for row, line in ipairs(lines) do
+    local start_col = 0
+    while true do
+      local match = vim.fn.matchstrpos(line, pattern, start_col)
+      local from = tonumber(match[2])
+      local to = tonumber(match[3])
+
+      if from == nil or from < 0 or to == nil then break end
+
+      table.insert(positions, {
+        start_row = row - 1,
+        start_col = from,
+        end_row = row - 1,
+        end_col = to,
+      })
+
+      if to <= from then break end
+      start_col = to
+    end
+  end
+
+  return positions
+end
+
 local function jump_in_positions(positions, row, col, direction)
   if #positions == 0 then return nil end
 
